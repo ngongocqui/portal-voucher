@@ -1,63 +1,210 @@
-﻿/**
- * @name umi 的路由配置
- * @description 只支持 path,component,routes,redirect,wrappers,name,icon 的配置
- * @param path  path 只支持两种占位符配置，第一种是动态参数 :id 的形式，第二种是 * 通配符，通配符只能出现路由字符串的最后。
- * @param component 配置 location 和 path 匹配后用于渲染的 React 组件路径。可以是绝对路径，也可以是相对路径，如果是相对路径，会从 src/pages 开始找起。
- * @param routes 配置子路由，通常在需要为多个路径增加 layout 组件时使用。
- * @param redirect 配置路由跳转
- * @param wrappers 配置路由组件的包装组件，通过包装组件可以为当前的路由组件组合进更多的功能。 比如，可以用于路由级别的权限校验
- * @param name 配置路由的标题，默认读取国际化文件 menu.ts 中 menu.xxxx 的值，如配置 name 为 login，则读取 menu.ts 中 menu.login 的取值作为标题
- * @param icon 配置路由的图标，取值参考 https://ant.design/components/icon-cn， 注意去除风格后缀和大小写，如想要配置图标为 <StepBackwardOutlined /> 则取值应为 stepBackward 或 StepBackward，如想要配置图标为 <UserOutlined /> 则取值应为 user 或者 User
- * @doc https://umijs.org/docs/guides/routes
- */
-export default [
+﻿export default [
   {
-    path: '/user',
-    layout: false,
+    exact: false,
+    path: '/',
+    component: './layouts',
     routes: [
       {
-        name: 'login',
-        path: '/user/login',
-        component: './User/Login',
+        path: '/user',
+        layout: false,
+        access: '/user',
+        routes: [
+          {
+            name: 'login',
+            path: '/user/login',
+            component: './User/Login',
+            access: '/user/login',
+          },
+          {
+            path: '/user',
+            redirect: '/user/login',
+          },
+        ],
       },
-    ],
-  },
-  {
-    path: '/welcome',
-    name: 'welcome',
-    icon: 'smile',
-    component: './Welcome',
-  },
-  {
-    path: '/admin',
-    name: 'admin',
-    icon: 'crown',
-    access: 'canAdmin',
-    routes: [
       {
         path: '/admin',
-        redirect: '/admin/sub-page',
+        name: 'admin',
+        icon: 'crown',
+        access: '/admin',
+        routes: [
+          {
+            name: 'Permission',
+            icon: 'control',
+            path: '/admin/permissions',
+            access: '/admin/permissions',
+            component: './Admin/Permission',
+          },
+          {
+            name: 'Menu',
+            icon: 'menu',
+            path: '/admin/menus',
+            access: '/admin/menus',
+            component: './Admin/Menu',
+          },
+          {
+            name: 'Role',
+            icon: 'gold',
+            path: '/admin/roles',
+            access: '/admin/roles',
+            component: './Admin/Role',
+          },
+          {
+            name: 'User',
+            icon: 'user',
+            path: '/admin/users',
+            access: '/admin/users',
+            component: './Admin/User',
+          },
+          {
+            path: '/admin',
+            redirect: '/admin/users',
+          },
+        ],
       },
       {
-        path: '/admin/sub-page',
-        name: 'sub-page',
-        component: './Admin',
+        path: '/movie-data',
+        name: 'movie-data',
+        icon: 'database',
+        access: '/movie-data',
+        routes: [
+          {
+            name: 'Category',
+            icon: 'control',
+            path: '/movie-data/category',
+            access: '/movie-data/category',
+            component: './MovieData/Category',
+          },
+          {
+            name: 'Movie-Group',
+            icon: 'table',
+            path: '/movie-data/movie-group',
+            access: '/movie-data/movie-group',
+            component: './MovieData/MovieGroup',
+          },
+          {
+            name: 'Part-Movie',
+            icon: 'apartment',
+            path: '/movie-data/part-movie',
+            access: '/movie-data/part-movie',
+            component: './MovieData/PartMovie',
+          },
+          {
+            name: 'Fansub',
+            icon: 'team',
+            path: '/movie-data/fansub',
+            access: '/movie-data/fansub',
+            component: './MovieData/Fansub',
+          },
+          {
+            name: 'Movie',
+            icon: 'gold',
+            path: '/movie-data/movie',
+            access: '/movie-data/movie',
+            component: './MovieData/Movie',
+          },
+          {
+            name: 'Movie-Status',
+            icon: 'gold',
+            path: '/movie-data/movie-status',
+            access: '/movie-data/movie-status',
+            component: './MovieData/MovieStatus',
+          },
+          {
+            name: 'Error-Movie',
+            icon: 'exclamation',
+            path: '/movie-data/error-movie',
+            access: '/movie-data/error-movie',
+            component: './MovieData/ErrorMovie',
+          },
+          {
+            name: 'Comment',
+            icon: 'wechat',
+            path: '/movie-data/comment',
+            access: '/movie-data/comment',
+            component: './MovieData/Comment',
+          },
+          {
+            path: '/movie-data',
+            redirect: '/movie-data/movie',
+          },
+        ],
+      },
+      {
+        path: '/history',
+        name: 'history',
+        icon: 'history',
+        access: '/history',
+        routes: [
+          {
+            name: 'Upload-History',
+            icon: 'upload',
+            path: '/history/upload-history',
+            access: '/history/upload-history',
+            component: './History/UploadHistory',
+          },
+          {
+            path: '/history',
+            redirect: '/history/upload-history',
+          },
+        ],
+      },
+      {
+        path: '/system',
+        name: 'system',
+        icon: 'windows',
+        access: '/system',
+        routes: [
+          {
+            name: 'Setting-System',
+            icon: 'setting',
+            path: '/system/setting-system',
+            access: '/system/setting-system',
+            component: './System/SettingSystem',
+          },
+          {
+            name: 'Auto-Upload',
+            icon: 'upload',
+            path: '/system/auto-upload',
+            access: '/system/auto-upload',
+            component: './System/AutoUpload',
+          },
+          {
+            path: '/system',
+            redirect: '/system/valid-address',
+          },
+        ],
+      },
+      {
+        path: '/forum',
+        name: 'forum',
+        icon: 'form',
+        access: '/forum',
+        routes: [
+          {
+            name: 'Group-Chat',
+            icon: 'usergroup-add',
+            path: '/forum/group-chat',
+            access: '/forum/group-chat',
+            component: './Forum/GroupChat',
+          },
+          {
+            path: '/forum',
+            redirect: '/forum/group-chat',
+          },
+        ],
+      },
+      {
+        path: '/account',
+        name: 'account',
+        icon: 'account',
+        access: '/account',
+        component: './Account',
+        hideInMenu: true,
+      },
+      {
+        path: '/',
+        redirect: '/user/login',
       },
     ],
-  },
-  {
-    name: 'list.table-list',
-    icon: 'table',
-    path: '/list',
-    component: './TableList',
-  },
-  {
-    path: '/',
-    redirect: '/welcome',
-  },
-  {
-    path: '*',
-    layout: false,
-    component: './404',
   },
 ];

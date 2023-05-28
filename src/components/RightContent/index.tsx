@@ -1,31 +1,29 @@
-import { QuestionCircleOutlined } from '@ant-design/icons';
-import { SelectLang as UmiSelectLang } from '@umijs/max';
+import { Space } from 'antd';
 import React from 'react';
+// @ts-ignore
+import { useModel, SelectLang } from 'umi';
+import styles from './index.less';
+import { getLocales } from '@/utils/utils';
+import AvatarDropdown from '@/components/RightContent/components/AvatarDropdown';
 
-export type SiderTheme = 'light' | 'dark';
+const GlobalHeaderRight: React.FC = () => {
+  const { initialState } = useModel('@@initialState');
 
-export const SelectLang = () => {
+  if (!initialState || !initialState.settings) {
+    return null;
+  }
+
+  const { navTheme, layout } = initialState.settings;
+  let className = styles.right;
+
+  if ((navTheme === 'dark' && layout === 'top') || layout === 'mix') {
+    className = `${styles.right}  ${styles.dark}`;
+  }
   return (
-    <UmiSelectLang
-      style={{
-        padding: 4,
-      }}
-    />
+    <Space className={className}>
+      <AvatarDropdown />
+      <SelectLang className={styles.action} postLocalesData={() => getLocales()} />
+    </Space>
   );
 };
-
-export const Question = () => {
-  return (
-    <div
-      style={{
-        display: 'flex',
-        height: 26,
-      }}
-      onClick={() => {
-        window.open('https://pro.ant.design/docs/getting-started');
-      }}
-    >
-      <QuestionCircleOutlined />
-    </div>
-  );
-};
+export default GlobalHeaderRight;
