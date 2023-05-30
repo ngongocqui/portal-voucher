@@ -7,7 +7,7 @@ export default {
   'menu.login': 'Đăng nhập',
   'menu.movie-data': 'Dữ liệu phim',
   'menu.movie-data.Category': 'Quản lý thể loại',
-  'menu.movie-data.Movie': 'Quản lý phim',
+  'menu.movie-data.Movie': 'Quản lý',
   'menu.movie-data.Split-File': 'Quản lý tách file',
   'menu.movie-data.Movie-Status': 'Quản lý trạng thái phim',
   'menu.movie-data.Error-Movie': 'Quản lý phim lỗi',

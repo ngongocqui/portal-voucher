@@ -8,6 +8,12 @@ declare namespace UserLogin {
     type?: I_TYPE_FORM;
   };
 
+  type RegisterParams = {
+    username: string;
+    password: string;
+    confirm_password: string;
+  };
+
   type AuthParams = {
     email: string;
     password: string;
