@@ -9,9 +9,10 @@ declare namespace UserLogin {
   };
 
   type RegisterParams = {
-    username: string;
+    email: string;
+    name: string;
+    phone: string;
     password: string;
-    confirm_password: string;
   };
 
   type AuthParams = {

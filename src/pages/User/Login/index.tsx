@@ -1,11 +1,11 @@
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { LockOutlined, UserOutlined, PhoneOutlined } from '@ant-design/icons';
 import React from 'react';
 import ProForm, { ProFormCheckbox, ProFormText } from '@ant-design/pro-form';
 // @ts-ignore
 import { useIntl, Link, history, FormattedMessage, SelectLang, useModel } from 'umi';
 import styles from '@/pages/User/Login/style.less';
 import { getLocales, saveToken, validationPassWord } from '@/utils/utils';
-import { getProfile, login } from '@/pages/User/Login/services';
+import { getProfile, login, register } from '@/pages/User/Login/services';
 import { Tabs, message } from 'antd';
 import { UserLogin } from './data';
 
@@ -19,8 +19,11 @@ const goto = () => {
 };
 
 const Login: React.FC = () => {
-  const [submitting, setSubmitting] = React.useState(false);
-  const [form] = ProForm.useForm();
+  const [loginSubmitting, setLoginSubmitting] = React.useState(false);
+  const [registerSubmitting, setRegisterSubmitting] = React.useState(false);
+  const [formLogin] = ProForm.useForm();
+  const [formRegister] = ProForm.useForm();
+  const [activeKey, setActiveKey] = React.useState('1');
   const { initialState, setInitialState } = useModel('@@initialState');
   const intl = useIntl();
 
@@ -43,12 +46,12 @@ const Login: React.FC = () => {
   };
 
   const handleLoginSubmit = async (values: UserLogin.LoginParams) => {
-    setSubmitting(true);
+    setLoginSubmitting(true);
     const res = await login({
       email: values.username,
       password: values.password,
     });
-    setSubmitting(false);
+    setLoginSubmitting(false);
 
     if (!res) return;
     saveToken(res?.token);
@@ -56,14 +59,19 @@ const Login: React.FC = () => {
   };
 
   const handleRegisterSubmit = async (values: UserLogin.RegisterParams) => {
-    setSubmitting(true);
-    const res = await login({
-      email: values.username,
+    setRegisterSubmitting(true);
+    const res = await register({
+      email: values.email,
       password: values.password,
+      name: values.name,
+      phone: values.phone,
     });
-    setSubmitting(false);
+    setRegisterSubmitting(false);
 
-    if (!res) return message.error('Đăng ký thất bại!');
+    if (!res) return;
+
+    setActiveKey('1');
+    formRegister.resetFields();
     message.success('Đăng ký thành công!');
   };
 
@@ -85,10 +93,10 @@ const Login: React.FC = () => {
           <div className={styles.desc}></div>
         </div>
         <div className={styles.main}>
-          <Tabs accessKey="1">
+          <Tabs activeKey={activeKey} onChange={(active) => setActiveKey(active)}>
             <Tabs.TabPane tab="Đăng nhập" key="1">
               <ProForm
-                form={form}
+                form={formLogin}
                 initialValues={{ autoLogin: true }}
                 submitter={{
                   searchConfig: {
@@ -99,7 +107,7 @@ const Login: React.FC = () => {
                   },
                   render: (_, dom) => dom.pop(),
                   submitButtonProps: {
-                    loading: submitting,
+                    loading: loginSubmitting,
                     size: 'large',
                     style: {
                       width: '100%',
@@ -110,7 +118,7 @@ const Login: React.FC = () => {
                   await handleLoginSubmit(values);
                 }}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter') form.submit();
+                  if (e.key === 'Enter') formLogin.submit();
                 }}
               >
                 <ProFormText
@@ -176,7 +184,7 @@ const Login: React.FC = () => {
             </Tabs.TabPane>
             <Tabs.TabPane tab="Đăng ký" key="2">
               <ProForm
-                form={form}
+                form={formRegister}
                 submitter={{
                   searchConfig: {
                     submitText: intl.formatMessage({
@@ -186,7 +194,7 @@ const Login: React.FC = () => {
                   },
                   render: (_, dom) => dom.pop(),
                   submitButtonProps: {
-                    loading: submitting,
+                    loading: registerSubmitting,
                     size: 'large',
                     style: {
                       width: '100%',
@@ -197,11 +205,33 @@ const Login: React.FC = () => {
                   await handleRegisterSubmit(values);
                 }}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter') form.submit();
+                  if (e.key === 'Enter') formRegister.submit();
                 }}
               >
                 <ProFormText
-                  name="username"
+                  name="name"
+                  fieldProps={{
+                    size: 'large',
+                    prefix: <UserOutlined className={styles.prefixIcon} />,
+                  }}
+                  placeholder={intl.formatMessage({
+                    id: 'pages.login.name.placeholder',
+                    defaultMessage: 'Nhập tên',
+                  })}
+                  rules={[
+                    {
+                      required: true,
+                      message: (
+                        <FormattedMessage
+                          id="pages.login.name.required"
+                          defaultMessage="Bạn chưa nhập tên!"
+                        />
+                      ),
+                    },
+                  ]}
+                />
+                <ProFormText
+                  name="email"
                   fieldProps={{
                     size: 'large',
                     prefix: <UserOutlined className={styles.prefixIcon} />,
@@ -226,6 +256,28 @@ const Login: React.FC = () => {
                         <FormattedMessage
                           id="pages.login.username.email"
                           defaultMessage="Email không hợp lệ!"
+                        />
+                      ),
+                    },
+                  ]}
+                />
+                <ProFormText
+                  name="phone"
+                  fieldProps={{
+                    size: 'large',
+                    prefix: <PhoneOutlined className={styles.prefixIcon} />,
+                  }}
+                  placeholder={intl.formatMessage({
+                    id: 'pages.login.phone.placeholder',
+                    defaultMessage: 'Nhập số điện thoại',
+                  })}
+                  rules={[
+                    {
+                      required: true,
+                      message: (
+                        <FormattedMessage
+                          id="pages.login.phone.required"
+                          defaultMessage="Bạn chưa nhập số điện thoại!"
                         />
                       ),
                     },
@@ -275,6 +327,15 @@ const Login: React.FC = () => {
                       ),
                     },
                     { validator: validationPassWord },
+                    ({ getFieldValue }) => ({
+                      validator(rule, value) {
+                        if (!value || getFieldValue('password') === value) {
+                          return Promise.resolve();
+                        }
+                        // eslint-disable-next-line prefer-promise-reject-errors
+                        return Promise.reject('Mật khẩu xác nhận không khớp!');
+                      },
+                    }),
                   ]}
                 />
               </ProForm>
