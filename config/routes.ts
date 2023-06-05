@@ -70,6 +70,20 @@
         hideInMenu: true,
       },
       {
+        path: '/store',
+        name: 'store',
+        icon: 'appstore',
+        access: '/store',
+        component: './Store',
+      },
+      {
+        path: '/campaign',
+        name: 'campaign',
+        icon: 'appstore',
+        access: '/campaign',
+        component: './Campaign',
+      },
+      {
         path: '/',
         redirect: '/user/login',
       },

@@ -74,7 +74,7 @@ const BasicLayout = (props: any) => {
       primaryColor="#1890ff"
       layout="top"
       contentWidth="Fluid"
-      title={formatMessage({ id: 'pages.login.title', defaultMessage: 'Quản lý phim' })}
+      title={formatMessage({ id: 'pages.login.title', defaultMessage: 'Quản lý khuyến mãi' })}
       colorWeak={false}
       siderWidth={256}
       onMenuHeaderClick={(e) => {

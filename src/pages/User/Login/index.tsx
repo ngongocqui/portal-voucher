@@ -1,4 +1,4 @@
-import { LockOutlined, UserOutlined, PhoneOutlined } from '@ant-design/icons';
+import { LockOutlined, UserOutlined, PhoneOutlined, MailOutlined } from '@ant-design/icons';
 import React from 'react';
 import ProForm, { ProFormCheckbox, ProFormText } from '@ant-design/pro-form';
 // @ts-ignore
@@ -86,7 +86,7 @@ const Login: React.FC = () => {
             <Link to="/">
               <img alt="logo" className={styles.logo} src="/logo.svg" />
               <span className={styles.title}>
-                <FormattedMessage id="pages.login.title" defaultMessage="Quản lý" />
+                <FormattedMessage id="pages.login.title" defaultMessage="Quản lý khuyến mãi" />
               </span>
             </Link>
           </div>
@@ -234,7 +234,7 @@ const Login: React.FC = () => {
                   name="email"
                   fieldProps={{
                     size: 'large',
-                    prefix: <UserOutlined className={styles.prefixIcon} />,
+                    prefix: <MailOutlined className={styles.prefixIcon} />,
                   }}
                   placeholder={intl.formatMessage({
                     id: 'pages.login.username.placeholder',

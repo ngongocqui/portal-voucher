@@ -10,3 +10,4 @@ export { default as TextUrl } from '@/components/ProForm/ProFormTextUrl';
 export { default as SelectTypeMenu } from '@/components/ProForm/ProFormSelectTypeMenu';
 export { default as SelectMenu } from '@/components/ProForm/ProFormSelectMenu';
 export { default as SelectPermission } from '@/components/ProForm/ProFormSelectPermission';
+export { default as TextDescription } from '@/components/ProForm/ProFormTextDescription';
