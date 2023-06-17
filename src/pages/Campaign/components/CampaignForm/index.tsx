@@ -3,11 +3,14 @@ import { Modal, Card, Space } from 'antd';
 // @ts-ignore
 import { useDispatch, useSelector, useIntl } from 'umi';
 import ProForm from '@ant-design/pro-form';
-import { TextDescription, TextName } from '@/components/ProForm';
+import { DateRange, DigitDiscount, DigitQuantity, TextName } from '@/components/ProForm';
 import { CampaignModalState } from '@/pages/Campaign/model';
 import { createCampaign, updateCampaign } from '@/pages/Campaign/service';
 import { getKeyFromString } from '@/utils/utils';
 import { TYPE_FORM } from '@/utils/utils.enum';
+import moment from 'moment';
+import BraftEditor from 'braft-editor';
+import 'braft-editor/dist/index.css';
 
 const formLayout = {
   labelCol: { span: 6 },
@@ -21,17 +24,25 @@ const CampaignForm: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const modalRef = useRef(null);
   const [form] = ProForm.useForm();
+  const [textEditor, setTextEditor] = useState(BraftEditor.createEditorState(''));
 
   useEffect(() => {
     (function () {
       if (campaign.CampaignForm?.type) {
         if (campaign.CampaignForm?.type === TYPE_FORM.CREATE) {
           form.resetFields();
+          setTextEditor(BraftEditor.createEditorState(''));
         }
         if ([TYPE_FORM.UPDATE, TYPE_FORM.COPY].includes(campaign.CampaignForm?.type)) {
           form.setFieldsValue({
             ...campaign.CampaignForm.itemEdit,
+            display_date: campaign.CampaignForm.itemEdit?.startDate &&
+              campaign.CampaignForm.itemEdit?.endDate && [
+                campaign.CampaignForm.itemEdit?.startDate,
+                campaign.CampaignForm.itemEdit?.endDate,
+              ],
           });
+          setTextEditor(BraftEditor.createEditorState(campaign.CampaignForm.itemEdit?.content));
         }
       }
       setModalVisible(!!campaign.CampaignForm?.type);
@@ -42,17 +53,22 @@ const CampaignForm: React.FC = () => {
     return (
       <div>
         <div className="flex justify-center">
-          <div className="w-480px">
-            <TextName name="title" />
-            <TextDescription />
+          <div className="w-500px">
+            <TextName name="name" />
+            <DigitQuantity name="quantity" />
+            <DigitDiscount name="discount" />
+            <DateRange name="display_date" />
           </div>
         </div>
+        <Card title="Nội dung" size="small">
+          <BraftEditor language="en" value={textEditor} onChange={setTextEditor} />
+        </Card>
       </div>
     );
   };
 
   const onCancel = () => {
-    dispatch({ type: 'Campaign/updateCampaignForm', payload: { type: '' } });
+    dispatch({ type: 'campaign/updateCampaignForm', payload: { type: '' } });
     form.resetFields();
   };
 
@@ -83,8 +99,13 @@ const CampaignForm: React.FC = () => {
           layout="horizontal"
           onFinish={async (values) => {
             const body = {
-              ...values,
-              code: getKeyFromString(values.title),
+              name: values.name,
+              code: getKeyFromString(values.name),
+              quantity: values.quantity,
+              discount: values.discount,
+              startDate: moment(values.display_date[0]).toISOString(),
+              endDate: moment(values.display_date[1]).toISOString(),
+              content: textEditor.toHTML(),
             };
             const res = await (campaign.CampaignForm?.type === TYPE_FORM.UPDATE
               ? updateCampaign(campaign.CampaignForm?.itemEdit?.id || '', body)

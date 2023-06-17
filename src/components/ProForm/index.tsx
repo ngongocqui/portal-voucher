@@ -11,3 +11,6 @@ export { default as SelectTypeMenu } from '@/components/ProForm/ProFormSelectTyp
 export { default as SelectMenu } from '@/components/ProForm/ProFormSelectMenu';
 export { default as SelectPermission } from '@/components/ProForm/ProFormSelectPermission';
 export { default as TextDescription } from '@/components/ProForm/ProFormTextDescription';
+export { default as DigitQuantity } from '@/components/ProForm/ProFormQuantity';
+export { default as DigitDiscount } from '@/components/ProForm/ProFormDiscount';
+export { default as DateRange } from '@/components/ProForm/ProFormDateRange';

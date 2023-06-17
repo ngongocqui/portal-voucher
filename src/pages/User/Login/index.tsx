@@ -94,7 +94,13 @@ const Login: React.FC = () => {
         </div>
         <div className={styles.main}>
           <Tabs activeKey={activeKey} onChange={(active) => setActiveKey(active)}>
-            <Tabs.TabPane tab="Đăng nhập" key="1">
+            <Tabs.TabPane
+              tab={intl.formatMessage({
+                id: 'pages.login.submit',
+                defaultMessage: 'Đăng ký',
+              })}
+              key="1"
+            >
               <ProForm
                 form={formLogin}
                 initialValues={{ autoLogin: true }}
@@ -182,7 +188,13 @@ const Login: React.FC = () => {
                 </div>
               </ProForm>
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Đăng ký" key="2">
+            <Tabs.TabPane
+              tab={intl.formatMessage({
+                id: 'pages.register.submit',
+                defaultMessage: 'Đăng ký',
+              })}
+              key="2"
+            >
               <ProForm
                 form={formRegister}
                 submitter={{
