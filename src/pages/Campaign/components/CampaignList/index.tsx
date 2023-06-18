@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
 import {
+  FALLBACK_STRING,
   getCopyTooltip,
   getStatusEnum,
   getUpdateTooltip,
@@ -10,16 +11,17 @@ import {
 import LocaleProTable from '@/components/Locale/ProTable';
 import localeVN from './locale/viVN/proTable';
 import localeEN from './locale/enUS/proTable';
-import { EditTwoTone, CopyTwoTone } from '@ant-design/icons';
-import { Tag, Tooltip } from 'antd';
+import { EditTwoTone, CopyTwoTone, EyeOutlined } from '@ant-design/icons';
+import { Image, Tag, Tooltip } from 'antd';
 // @ts-ignore
 import { useDispatch, useIntl } from 'umi';
 import { queryCampaigns } from '@/pages/Campaign/service';
 import ChangeStatusCampaign from '@/pages/Campaign/components/CampaignList/components/ChangeStatusCampaign';
 import { CampaignItem } from '@/pages/Campaign/data';
 import CreateCampaign from '@/pages/Campaign/components/CampaignList/components/ToolBar/CreateCampaign';
-import { TYPE_FORM } from '@/utils/utils.enum';
+import { SIZE_AVATAR, TYPE_FORM } from '@/utils/utils.enum';
 import Access from '@/components/Access';
+import styles from '@/utils/utils.less';
 
 const CampaignList: React.FC = () => {
   const intl = useIntl();
@@ -52,6 +54,30 @@ const CampaignList: React.FC = () => {
           id: 'pages.Campaign.CampaignList.placeholder',
           defaultMessage: 'Nhập tên.',
         }),
+      },
+    },
+    {
+      title: intl.formatMessage({ id: 'pages.avatar', defaultMessage: 'Ảnh' }),
+      dataIndex: 'avatar',
+      width: 120,
+      search: false,
+      render: (_, record: CampaignItem) => {
+        return (
+          <a className={styles.avatar}>
+            <Image
+              placeholder={
+                <Image height={SIZE_AVATAR.height} src="error" fallback={FALLBACK_STRING} />
+              }
+              preview={{
+                mask: <EyeOutlined />,
+              }}
+              height={SIZE_AVATAR.height}
+              width={SIZE_AVATAR.width}
+              src={record?.avatar || ''}
+              fallback={FALLBACK_STRING}
+            />
+          </a>
+        );
       },
     },
     {
