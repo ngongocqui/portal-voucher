@@ -86,7 +86,7 @@ const CampaignForm: React.FC = () => {
 
   return (
     <Modal
-      width={campaign.CampaignForm?.type === TYPE_FORM.UPDATE ? 1000 : 600}
+      width={1000}
       title={
         campaign.CampaignForm?.type === TYPE_FORM.UPDATE
           ? intl.formatMessage({
