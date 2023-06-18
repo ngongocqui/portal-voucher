@@ -28,7 +28,7 @@ const getPermissions = (accessPaths: object, currentUser: UserItem | undefined) 
   if (menus && Array.isArray(menus)) {
     menus.forEach((it: RoleToMenu) => {
       const permissions = it.permissions.map((value) => value.code);
-      if (permitData.hasOwnProperty(it.menu.url) && permissions.includes(ActionType.READ.value)) {
+      if (permitData.hasOwnProperty(it.menu.url) && permissions.includes(ActionType.BROWSE.value)) {
         permitData[it.menu.url] = true;
         permitData[`${it.menu.url.replace(/\//g, '')}_permissions`] = (permitStr: string[]) => {
           return permitStr.some((r) => permissions.includes(r));

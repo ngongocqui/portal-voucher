@@ -84,6 +84,13 @@
         component: './Campaign',
       },
       {
+        path: '/voucher',
+        name: 'voucher',
+        icon: 'appstore',
+        access: '/voucher',
+        component: './Voucher',
+      },
+      {
         path: '/',
         redirect: '/user/login',
       },

@@ -8,6 +8,7 @@ export default {
   'menu.system': 'System',
   'menu.store': 'Store',
   'menu.campaign': 'Campaign',
+  'menu.voucher': 'Voucher',
   'menu.account': 'Personal Information',
   'menu.setting': 'Setting',
 };

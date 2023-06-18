@@ -8,6 +8,7 @@ export default {
   'menu.system': 'Hệ thống',
   'menu.store': 'Cửa hàng',
   'menu.campaign': 'Chiến dịch',
+  'menu.voucher': 'Voucher',
   'menu.history': 'Lịch sử',
   'menu.account': 'Thông tin cá nhân',
   'menu.setting': 'Cài đặt',

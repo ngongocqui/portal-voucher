@@ -120,6 +120,12 @@ const CampaignList: React.FC = () => {
       search: false,
     },
     {
+      title: intl.formatMessage({ id: 'pages.createdBy', defaultMessage: 'Người tạo' }),
+      dataIndex: ['created_by', 'name'],
+      width: 150,
+      search: false,
+    },
+    {
       title: intl.formatMessage({ id: 'pages.createdAt', defaultMessage: 'Ngày tạo' }),
       dataIndex: 'createdAt',
       valueType: 'dateTime',
@@ -207,7 +213,7 @@ const CampaignList: React.FC = () => {
         <ProTable<CampaignItem>
           headerTitle={intl.formatMessage({
             id: 'pages.Campaign.CampaignList.headerTitle',
-            defaultMessage: 'Danh sách cửa hàng',
+            defaultMessage: 'Danh sách chiến dịch',
           })}
           actionRef={actionRef}
           rowKey="id"

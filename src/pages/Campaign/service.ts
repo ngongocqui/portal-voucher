@@ -1,4 +1,4 @@
-import { paramsConverter, removeParamsEmpty, sortConverter } from '@/utils/utils';
+import { joinConverter, paramsConverter, removeParamsEmpty, sortConverter } from '@/utils/utils';
 import request from '@/utils/request';
 import {
   ChangeStatusCampaign,
@@ -9,7 +9,9 @@ import {
 } from '@/pages/Campaign/data';
 
 const keyword_params = 'name';
-const join_params = {};
+const join_params = {
+  created_by: [{ key: 'created_by.id', condition: '$eq' }],
+};
 
 export async function queryCampaigns(
   params: any,
@@ -19,6 +21,7 @@ export async function queryCampaigns(
   const res = await request({
     url: 'campaigns',
     method: 'GET',
+    joins: joinConverter({ ...filter, ...params, join: 'created_by' }, join_params),
     params: paramsConverter({ ...filter, ...params }, join_params, keyword_params),
     sorts: sortConverter({ ...sort, updatedAt: 'descend' }),
   });
