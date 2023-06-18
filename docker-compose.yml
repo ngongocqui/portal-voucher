@@ -1,8 +1,8 @@
 version: '3.4'
 
 services:
-  movieadminv3:
-    image: movieadminv3
+  portalvoucher:
+    image: portalvoucher
     build:
       context: .
       dockerfile: ./Dockerfile
