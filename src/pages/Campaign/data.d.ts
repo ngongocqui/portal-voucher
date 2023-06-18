@@ -1,5 +1,7 @@
 export interface CampaignItem {
   code: string;
+  avatar: string;
+  content: string;
   createdAt: string;
   id: string;
   name: string;
@@ -14,6 +16,8 @@ export interface CampaignItem {
 export interface CreateCampaign {
   code: string;
   name: string;
+  avatar?: string;
+  content: string;
   quantity: number;
   discount: number;
   startDate: string;
@@ -23,6 +27,8 @@ export interface CreateCampaign {
 export interface UpdateCampaign {
   code: string;
   name: string;
+  avatar?: string;
+  content: string;
   quantity: number;
   discount: number;
   startDate: string;

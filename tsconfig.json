@@ -12,13 +12,13 @@
     "moduleResolution": "node",
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
-    "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
     "allowJs": true,
     "skipLibCheck": true,
     "experimentalDecorators": true,
     "strict": true,
     "paths": {
+      "react": ["./node_modules/@types/react"],
       "@/*": ["./src/*"],
       "@@/*": ["./src/.umi/*"]
     }

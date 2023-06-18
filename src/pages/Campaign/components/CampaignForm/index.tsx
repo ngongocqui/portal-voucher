@@ -3,7 +3,13 @@ import { Modal, Card, Space } from 'antd';
 // @ts-ignore
 import { useDispatch, useSelector, useIntl } from 'umi';
 import ProForm from '@ant-design/pro-form';
-import { DateRange, DigitDiscount, DigitQuantity, TextName } from '@/components/ProForm';
+import {
+  DateRange,
+  DigitDiscount,
+  DigitQuantity,
+  TextName,
+  UploadAvatar,
+} from '@/components/ProForm';
 import { CampaignModalState } from '@/pages/Campaign/model';
 import { createCampaign, updateCampaign } from '@/pages/Campaign/service';
 import { getKeyFromString } from '@/utils/utils';
@@ -11,6 +17,7 @@ import { TYPE_FORM } from '@/utils/utils.enum';
 import moment from 'moment';
 import BraftEditor from 'braft-editor';
 import 'braft-editor/dist/index.css';
+import { ActionAvatar } from '@/components/ProForm/ProFormAvatar/data';
 
 const formLayout = {
   labelCol: { span: 6 },
@@ -24,6 +31,7 @@ const CampaignForm: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const modalRef = useRef(null);
   const [form] = ProForm.useForm();
+  const avatarRef = useRef<ActionAvatar>();
   const [textEditor, setTextEditor] = useState(BraftEditor.createEditorState(''));
 
   useEffect(() => {
@@ -31,6 +39,7 @@ const CampaignForm: React.FC = () => {
       if (campaign.CampaignForm?.type) {
         if (campaign.CampaignForm?.type === TYPE_FORM.CREATE) {
           form.resetFields();
+          avatarRef.current?.setImageUrl('');
           setTextEditor(BraftEditor.createEditorState(''));
         }
         if ([TYPE_FORM.UPDATE, TYPE_FORM.COPY].includes(campaign.CampaignForm?.type)) {
@@ -42,6 +51,7 @@ const CampaignForm: React.FC = () => {
                 campaign.CampaignForm.itemEdit?.endDate,
               ],
           });
+          avatarRef.current?.setImageUrl(campaign.CampaignForm.itemEdit?.avatar || '');
           setTextEditor(BraftEditor.createEditorState(campaign.CampaignForm.itemEdit?.content));
         }
       }
@@ -54,6 +64,7 @@ const CampaignForm: React.FC = () => {
       <div>
         <div className="flex justify-center">
           <div className="w-500px">
+            <UploadAvatar ref={avatarRef} folder="avatar" />
             <TextName name="name" />
             <DigitQuantity name="quantity" />
             <DigitDiscount name="discount" />
@@ -70,6 +81,7 @@ const CampaignForm: React.FC = () => {
   const onCancel = () => {
     dispatch({ type: 'campaign/updateCampaignForm', payload: { type: '' } });
     form.resetFields();
+    avatarRef.current?.setImageUrl('');
   };
 
   return (
@@ -106,6 +118,7 @@ const CampaignForm: React.FC = () => {
               startDate: moment(values.display_date[0]).toISOString(),
               endDate: moment(values.display_date[1]).toISOString(),
               content: textEditor.toHTML(),
+              avatar: avatarRef.current?.getImageUrl(),
             };
             const res = await (campaign.CampaignForm?.type === TYPE_FORM.UPDATE
               ? updateCampaign(campaign.CampaignForm?.itemEdit?.id || '', body)
@@ -136,6 +149,9 @@ const CampaignForm: React.FC = () => {
             resetButtonProps: {
               className: campaign.CampaignForm?.type === TYPE_FORM.UPDATE ? 'hidden' : '',
             },
+          }}
+          onReset={() => {
+            avatarRef.current?.setImageUrl('');
           }}
         >
           <Card>{renderContent()}</Card>
